@@ -21,6 +21,6 @@ app
   .use(landingRoutes)
   .use(docsRoutes)
   .use(apiRoutes)
-  .listen(3000);
+  .listen(Number(Bun.env.PORT) || 3000);
 
 console.log(`Docs site running at http://localhost:${app.server?.port}`);
