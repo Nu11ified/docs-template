@@ -1,0 +1,126 @@
+---
+title: Landing Page
+description: How to configure the landing page sections in site.yaml
+---
+
+# Landing Page
+
+The landing page is composed of sections defined in `site.yaml` under `landing.sections`. Sections render in order, top to bottom.
+
+## Available section types
+
+### Hero
+
+The main banner at the top of the page.
+
+```yaml
+landing:
+  sections:
+    - type: hero
+      badge: "Open Source"           # Optional pill badge
+      title: "Your headline here"
+      subtitle: "A longer description"
+      primaryCTA:
+        label: "Get Started"
+        href: "/docs"
+      secondaryCTA:
+        label: "GitHub"
+        href: "https://github.com/..."
+```
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `badge` | No | Small badge text above the headline |
+| `title` | Yes | Main headline |
+| `subtitle` | No | Description text below the headline |
+| `primaryCTA` | No | Primary call-to-action button |
+| `secondaryCTA` | No | Secondary outline button |
+
+### Features
+
+A grid of feature cards with icons.
+
+```yaml
+    - type: features
+      title: "Built for developers"
+      columns: 3
+      items:
+        - icon: "zap"
+          title: "Lightning Fast"
+          description: "Sub-millisecond response times."
+        - icon: "code"
+          title: "MDX Powered"
+          description: "Write Markdown with React components."
+```
+
+Available icons: `zap`, `code`, `search`, `palette`, `shield`, `rocket`.
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `title` | No | Section heading |
+| `columns` | No | Grid columns (1–4, default 3) |
+| `items` | Yes | Array of feature cards |
+
+### FAQ
+
+An accordion-style frequently asked questions section.
+
+```yaml
+    - type: faq
+      title: "FAQ"
+      items:
+        - question: "How do I get started?"
+          answer: "Clone the repo and run bun install."
+```
+
+### CTA
+
+A call-to-action section with a headline and button.
+
+```yaml
+    - type: cta
+      title: "Ready to start?"
+      description: "Get your docs up in minutes."
+      button:
+        label: "Read the Docs"
+        href: "/docs"
+```
+
+## Example configuration
+
+Here is a complete landing page with all section types:
+
+```yaml
+landing:
+  sections:
+    - type: hero
+      badge: "v1.0"
+      title: "Documentation that works."
+      subtitle: "Fast, simple, configurable."
+      primaryCTA:
+        label: "Get Started"
+        href: "/docs"
+    - type: features
+      title: "Features"
+      columns: 3
+      items:
+        - icon: "zap"
+          title: "Fast"
+          description: "Built on Bun."
+        - icon: "search"
+          title: "Search"
+          description: "Built-in FlexSearch."
+        - icon: "palette"
+          title: "Themeable"
+          description: "One YAML file."
+    - type: faq
+      title: "FAQ"
+      items:
+        - question: "Is it free?"
+          answer: "Yes, fully open source."
+    - type: cta
+      title: "Start building."
+      button:
+        label: "Read the Docs"
+        href: "/docs"
+```

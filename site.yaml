@@ -1,19 +1,19 @@
 # Site metadata
 site:
-  name: "My Project"
-  tagline: "Build faster with less"
+  name: "null docs"
+  tagline: "Beautiful documentation, instantly."
   logo: "/logo.svg"
   favicon: "/favicon.ico"
   url: "https://docs.myproject.com"
-  repo: "https://github.com/org/repo"
+  repo: "https://github.com/Nu11ified/docs-template"
 
-# Theming — values become CSS custom properties
+# Theming
 theme:
   colors:
     primary: "#6366f1"
     secondary: "#ec4899"
-    background: "#ffffff"
-    surface: "#f8fafc"
+    background: "#f8f9fa"
+    surface: "#ffffff"
     text: "#0f172a"
     dark:
       background: "#0f172a"
@@ -23,53 +23,66 @@ theme:
     heading: "Inter"
     body: "Inter"
     code: "JetBrains Mono"
-  radius: "md" # none | sm | md | lg | full
+  radius: "lg"
 
-# Landing page — ordered section array
+# Landing page sections
 landing:
   sections:
     - type: hero
-      title: "Ship docs that developers love"
-      subtitle: "Lightweight, fast, customizable documentation powered by Bun + ElysiaJS."
+      badge: "Open Source"
+      title: "Documentation that just works."
+      subtitle: "Beautiful, fast, and fully customizable docs — powered by Bun, ElysiaJS, and MDX. One YAML file to configure everything."
       primaryCTA:
         label: "Get Started"
         href: "/docs"
       secondaryCTA:
-        label: "GitHub"
-        href: "https://github.com/org/repo"
-      image: "/hero-screenshot.png"
+        label: "View on GitHub"
+        href: "https://github.com/Nu11ified/docs-template"
     - type: features
-      title: "Why choose this?"
+      title: "Built for developers"
       columns: 3
       items:
         - icon: "zap"
           title: "Lightning Fast"
-          description: "Built on Bun + ElysiaJS for maximum speed"
-        - icon: "palette"
-          title: "Customizable"
-          description: "Theme everything via a single YAML file"
+          description: "Sub-millisecond responses. Bun runtime + ElysiaJS means your docs load before your users blink."
+        - icon: "code"
+          title: "MDX Powered"
+          description: "Write in Markdown, embed React components. Shiki syntax highlighting with zero client-side JS."
         - icon: "search"
-          title: "Full-text Search"
-          description: "Server-side search across all docs"
+          title: "Instant Search"
+          description: "Server-side FlexSearch indexes every page. No Algolia, no client bundle, just fast results."
+        - icon: "palette"
+          title: "One YAML Config"
+          description: "Colors, fonts, sections, navigation — everything is driven by a single site.yaml file."
+        - icon: "shield"
+          title: "Type-safe"
+          description: "Zod-validated configuration catches errors before they reach production. No surprises."
+        - icon: "rocket"
+          title: "Deploy Anywhere"
+          description: "Docker, Fly.io, Railway, or bare metal. It's just a Bun server — runs everywhere."
+    - type: faq
+      title: "FAQ"
+      items:
+        - question: "How do I get started?"
+          answer: "Clone the repo, run bun install, edit site.yaml, and run bun dev. Your docs site is ready in under 5 minutes."
+        - question: "Can I use custom React components in docs?"
+          answer: "Yes — docs are written in MDX, so you can import and use any React component directly in your markdown files."
+        - question: "Is server-side search good enough?"
+          answer: "For most doc sites, absolutely. FlexSearch indexes at build time and serves results in microseconds."
+        - question: "Can I deploy this anywhere?"
+          answer: "Yes — anywhere that runs Bun. Docker, Fly.io, Railway, or any VPS. It's just a Bun server."
     - type: cta
-      title: "Ready to get started?"
-      description: "Set up your docs site in under 5 minutes."
+      title: "Ship your docs today."
+      description: "Clone, configure, deploy. No config hell."
       button:
         label: "Read the Docs"
         href: "/docs"
-    - type: testimonials
-      items:
-        - quote: "Best docs template I've used."
-          author: "Jane Doe"
-          role: "Staff Engineer"
 
 # Docs configuration
 docs:
-  defaultVersion: "v2"
+  defaultVersion: "v1"
   versions:
-    - label: "v2"
-      path: "v2"
-    - label: "v1 (Legacy)"
+    - label: "v1"
       path: "v1"
   search:
     enabled: true
@@ -86,5 +99,5 @@ nav:
     - label: "Docs"
       href: "/docs"
     - label: "GitHub"
-      href: "https://github.com/org/repo"
+      href: "https://github.com/Nu11ified/docs-template"
       external: true

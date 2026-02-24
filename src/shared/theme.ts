@@ -20,13 +20,16 @@ const RADIUS_MAP: Record<Theme["radius"], string> = {
 export function generateThemeCSS(theme: Theme): string {
   const { colors, fonts, radius } = theme;
 
+  const SERIF_FONTS = ["Lora", "Playfair Display", "Merriweather", "Georgia", "Crimson Text", "EB Garamond"];
+  const headingFallback = SERIF_FONTS.includes(fonts.heading) ? "serif" : "sans-serif";
+
   const rootVars = [
     `  --site-primary: ${colors.primary};`,
     `  --site-secondary: ${colors.secondary};`,
     `  --site-background: ${colors.background};`,
     `  --site-surface: ${colors.surface};`,
     `  --site-text: ${colors.text};`,
-    `  --site-font-heading: '${fonts.heading}', sans-serif;`,
+    `  --site-font-heading: '${fonts.heading}', ${headingFallback};`,
     `  --site-font-body: '${fonts.body}', sans-serif;`,
     `  --site-font-code: '${fonts.code}', monospace;`,
     `  --site-radius: ${RADIUS_MAP[radius]};`,

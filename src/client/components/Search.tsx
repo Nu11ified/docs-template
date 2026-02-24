@@ -10,6 +10,24 @@ type SearchProps = {
   version?: string;
 };
 
+function useTheme() {
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    const check = () =>
+      setIsDark(
+        document.documentElement.getAttribute("data-theme") === "dark"
+      );
+    check();
+    const observer = new MutationObserver(check);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+    return () => observer.disconnect();
+  }, []);
+  return isDark;
+}
+
 export function Search({ version }: SearchProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -17,8 +35,8 @@ export function Search({ version }: SearchProps) {
   const [hasSearched, setHasSearched] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const isDark = useTheme();
 
-  // Keyboard shortcut: Cmd+K / Ctrl+K to open, Escape to close
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
@@ -29,34 +47,26 @@ export function Search({ version }: SearchProps) {
         setIsOpen(false);
       }
     }
-
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Auto-focus the input when the modal opens
   useEffect(() => {
     if (isOpen) {
-      // Small delay to ensure the modal is rendered
-      requestAnimationFrame(() => {
-        inputRef.current?.focus();
-      });
+      requestAnimationFrame(() => inputRef.current?.focus());
     } else {
-      // Reset state when closing
       setQuery("");
       setResults([]);
       setHasSearched(false);
     }
   }, [isOpen]);
 
-  // Debounced fetch
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
       setHasSearched(false);
       return;
     }
-
     const timer = setTimeout(async () => {
       try {
         const params = new URLSearchParams({ q: query });
@@ -70,35 +80,23 @@ export function Search({ version }: SearchProps) {
         setHasSearched(true);
       }
     }, 300);
-
     return () => clearTimeout(timer);
   }, [query, version]);
 
-  // Close when clicking the backdrop
-  const handleBackdropClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (e.target === e.currentTarget) {
-        setIsOpen(false);
-      }
-    },
-    [],
-  );
+  const handleBackdropClick = useCallback((e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) setIsOpen(false);
+  }, []);
 
-  // Basic focus trap: keep focus inside the modal
   useEffect(() => {
     if (!isOpen) return;
-
     function handleTab(e: KeyboardEvent) {
       if (e.key !== "Tab" || !modalRef.current) return;
-
       const focusable = modalRef.current.querySelectorAll<HTMLElement>(
         'a[href], button, input, [tabindex]:not([tabindex="-1"])',
       );
       if (focusable.length === 0) return;
-
       const first = focusable[0];
       const last = focusable[focusable.length - 1];
-
       if (e.shiftKey && document.activeElement === first) {
         e.preventDefault();
         last.focus();
@@ -107,50 +105,109 @@ export function Search({ version }: SearchProps) {
         first.focus();
       }
     }
-
     document.addEventListener("keydown", handleTab);
     return () => document.removeEventListener("keydown", handleTab);
   }, [isOpen]);
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
+
+  // Theme-aware colors
+  const colors = isDark
+    ? {
+        modalBg: "#1e293b",
+        modalBorder: "rgba(255, 255, 255, 0.1)",
+        inputText: "#f8fafc",
+        placeholder: "#64748b",
+        divider: "rgba(255, 255, 255, 0.08)",
+        resultHover: "rgba(255, 255, 255, 0.05)",
+        titleText: "#f1f5f9",
+        descText: "#94a3b8",
+        hintText: "#64748b",
+        kbdBg: "rgba(255, 255, 255, 0.06)",
+        kbdBorder: "rgba(255, 255, 255, 0.1)",
+        kbdText: "#94a3b8",
+      }
+    : {
+        modalBg: "#ffffff",
+        modalBorder: "#e2e8f0",
+        inputText: "#0f172a",
+        placeholder: "#94a3b8",
+        divider: "#e2e8f0",
+        resultHover: "#f8fafc",
+        titleText: "#0f172a",
+        descText: "#64748b",
+        hintText: "#94a3b8",
+        kbdBg: "#f8fafc",
+        kbdBorder: "#e2e8f0",
+        kbdText: "#94a3b8",
+      };
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 pt-[15vh]"
+      className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]"
       onClick={handleBackdropClick}
       role="dialog"
       aria-modal="true"
       aria-label="Search documentation"
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
+        backdropFilter: "blur(4px)",
+      }}
     >
       <div
         ref={modalRef}
-        className="w-full max-w-lg rounded-lg border border-[var(--color-surface)] bg-[var(--color-background)] shadow-2xl"
+        className="w-full max-w-lg rounded-xl overflow-hidden shadow-2xl"
+        style={{
+          backgroundColor: colors.modalBg,
+          border: `1px solid ${colors.modalBorder}`,
+        }}
       >
         {/* Search input */}
-        <div className="border-b border-[var(--color-surface)] p-4">
-          <input
-            ref={inputRef}
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type to search..."
-            aria-label="Search documentation"
-            className="w-full bg-transparent text-lg text-[var(--color-text)] outline-none placeholder:text-[var(--color-text)]/50"
-          />
+        <div className="p-4" style={{ borderBottom: `1px solid ${colors.divider}` }}>
+          <div className="flex items-center gap-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke={colors.placeholder}
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            <input
+              ref={inputRef}
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search documentation..."
+              aria-label="Search documentation"
+              className="w-full bg-transparent text-lg outline-none"
+              style={{ color: colors.inputText }}
+            />
+          </div>
         </div>
 
         {/* Results */}
         <div className="max-h-80 overflow-y-auto p-2">
           {!query.trim() && (
-            <div className="px-4 py-8 text-center text-sm text-[var(--color-text)]/60">
-              Type to search...
+            <div
+              className="px-4 py-8 text-center text-sm"
+              style={{ color: colors.placeholder }}
+            >
+              Start typing to search...
             </div>
           )}
 
           {query.trim() && hasSearched && results.length === 0 && (
-            <div className="px-4 py-8 text-center text-sm text-[var(--color-text)]/60">
+            <div
+              className="px-4 py-8 text-center text-sm"
+              style={{ color: colors.placeholder }}
+            >
               No results found for &ldquo;{query}&rdquo;
             </div>
           )}
@@ -160,13 +217,23 @@ export function Search({ version }: SearchProps) {
               key={result.slug}
               href={`/docs/${result.slug}`}
               onClick={() => setIsOpen(false)}
-              className="block rounded-md px-4 py-3 hover:bg-[var(--color-surface)] transition-colors"
+              className="block rounded-lg px-4 py-3 transition-colors"
+              style={{ ["--hover-bg" as string]: colors.resultHover }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.backgroundColor = colors.resultHover)
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.backgroundColor = "transparent")
+              }
             >
-              <div className="font-medium text-[var(--color-text)]">
+              <div className="font-medium" style={{ color: colors.titleText }}>
                 {result.title}
               </div>
               {result.description && (
-                <div className="mt-0.5 text-sm text-[var(--color-text)]/70 line-clamp-1">
+                <div
+                  className="mt-0.5 text-sm line-clamp-1"
+                  style={{ color: colors.descText }}
+                >
                   {result.description}
                 </div>
               )}
@@ -174,12 +241,40 @@ export function Search({ version }: SearchProps) {
           ))}
         </div>
 
-        {/* Footer hint */}
-        <div className="border-t border-[var(--color-surface)] px-4 py-2 text-xs text-[var(--color-text)]/50">
-          <kbd className="rounded border border-[var(--color-surface)] px-1.5 py-0.5 font-mono text-[10px]">
-            ESC
-          </kbd>{" "}
-          to close
+        {/* Footer */}
+        <div
+          className="flex items-center justify-between px-4 py-2.5 text-xs"
+          style={{
+            borderTop: `1px solid ${colors.divider}`,
+            color: colors.hintText,
+          }}
+        >
+          <span>
+            <kbd
+              className="rounded px-1.5 py-0.5 font-mono text-[10px]"
+              style={{
+                backgroundColor: colors.kbdBg,
+                border: `1px solid ${colors.kbdBorder}`,
+                color: colors.kbdText,
+              }}
+            >
+              ESC
+            </kbd>{" "}
+            to close
+          </span>
+          <span>
+            <kbd
+              className="rounded px-1.5 py-0.5 font-mono text-[10px]"
+              style={{
+                backgroundColor: colors.kbdBg,
+                border: `1px solid ${colors.kbdBorder}`,
+                color: colors.kbdText,
+              }}
+            >
+              ↵
+            </kbd>{" "}
+            to select
+          </span>
         </div>
       </div>
     </div>

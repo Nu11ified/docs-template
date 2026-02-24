@@ -3,6 +3,7 @@ import { Hero } from "./Hero";
 import { Features } from "./Features";
 import { CTA } from "./CTA";
 import { Testimonials } from "./Testimonials";
+import { FAQ } from "./FAQ";
 
 export function SectionRenderer({ sections }: { sections: LandingSection[] }) {
   return (
@@ -17,6 +18,8 @@ export function SectionRenderer({ sections }: { sections: LandingSection[] }) {
             return <CTA key={i} {...section} />;
           case "testimonials":
             return <Testimonials key={i} {...section} />;
+          case "faq":
+            return <FAQ key={i} {...section} />;
         }
       })}
     </>

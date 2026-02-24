@@ -71,9 +71,11 @@ export const HeroSectionSchema = z.object({
   type: z.literal("hero"),
   title: z.string(),
   subtitle: z.string().optional(),
+  badge: z.string().optional(),
   primaryCTA: CTAButtonSchema.optional(),
   secondaryCTA: CTAButtonSchema.optional(),
   image: z.string().optional(),
+  inputPlaceholder: z.string().optional(),
 });
 
 export type HeroSection = z.infer<typeof HeroSectionSchema>;
@@ -108,22 +110,41 @@ export const TestimonialItemSchema = z.object({
   quote: z.string(),
   author: z.string(),
   role: z.string().optional(),
+  avatar: z.string().optional(),
+  handle: z.string().optional(),
 });
 
 export type TestimonialItem = z.infer<typeof TestimonialItemSchema>;
 
 export const TestimonialsSectionSchema = z.object({
   type: z.literal("testimonials"),
+  title: z.string().optional(),
   items: z.array(TestimonialItemSchema),
 });
 
 export type TestimonialsSection = z.infer<typeof TestimonialsSectionSchema>;
+
+export const FAQItemSchema = z.object({
+  question: z.string(),
+  answer: z.string(),
+});
+
+export type FAQItem = z.infer<typeof FAQItemSchema>;
+
+export const FAQSectionSchema = z.object({
+  type: z.literal("faq"),
+  title: z.string().optional(),
+  items: z.array(FAQItemSchema),
+});
+
+export type FAQSection = z.infer<typeof FAQSectionSchema>;
 
 export const LandingSectionSchema = z.discriminatedUnion("type", [
   HeroSectionSchema,
   FeaturesSectionSchema,
   CTASectionSchema,
   TestimonialsSectionSchema,
+  FAQSectionSchema,
 ]);
 
 export type LandingSection = z.infer<typeof LandingSectionSchema>;

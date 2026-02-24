@@ -1,27 +1,67 @@
 ---
 title: Installation
-description: How to install and set up the docs template
+description: How to install and set up null docs
 ---
 
 # Installation
 
 ## Prerequisites
 
-- [Bun](https://bun.sh) v1.0 or later
-
-## Steps
-
-1. Clone the template
-2. Install dependencies
-3. Start the dev server
+You need [Bun](https://bun.sh) v1.0 or later installed on your system.
 
 ```bash
-bunx degit org/docs-template my-docs
+# Install Bun (macOS / Linux)
+curl -fsSL https://bun.sh/install | bash
+```
+
+## Clone the template
+
+```bash
+git clone https://github.com/Nu11ified/docs-template my-docs
 cd my-docs
+```
+
+## Install dependencies
+
+```bash
 bun install
+```
+
+## Start the dev server
+
+```bash
 bun run dev
 ```
 
-## Configuration
+Your site is now running at [http://localhost:3000](http://localhost:3000). The dev server watches for file changes and automatically reloads.
 
-Edit `site.yaml` to customize your documentation site.
+## Build for production
+
+To create a production build:
+
+```bash
+bun run build
+```
+
+This runs three steps:
+
+1. **`build:content`** — Compiles all MDX files into the manifest
+2. **`build:client`** — Bundles client-side JavaScript (search, sidebar, theme toggle)
+3. **`build:css`** — Processes Tailwind CSS
+
+Then start the production server:
+
+```bash
+bun run start
+```
+
+## Project scripts
+
+| Script | Description |
+|--------|-------------|
+| `bun run dev` | Start development server with hot reload |
+| `bun run build` | Build content, client JS, and CSS for production |
+| `bun run start` | Start production server |
+| `bun run build:content` | Compile MDX files only |
+| `bun run build:client` | Bundle client-side JS only |
+| `bun run build:css` | Build Tailwind CSS only |

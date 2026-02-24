@@ -4,3 +4,4 @@ dist/
 public/assets/*.js
 public/assets/*.css
 *.log
+style-guide.md

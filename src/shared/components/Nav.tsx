@@ -42,6 +42,7 @@ export function Nav({ config, showVersionPicker, currentVersion }: NavProps) {
           {/* Search trigger */}
           <button
             type="button"
+            data-open-search
             className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-[var(--site-text)]/10 bg-[var(--site-surface)] px-3 py-1.5 text-sm text-[var(--site-text)]/50 hover:border-[var(--site-text)]/20 transition-colors"
           >
             <svg

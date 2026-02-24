@@ -1,0 +1,143 @@
+---
+title: Writing Docs
+description: How to write documentation pages with Markdown and MDX
+---
+
+# Writing Docs
+
+Documentation pages are MDX files stored under `content/v1/docs/`. MDX is Markdown with support for JSX — you can embed React components directly in your docs.
+
+## File structure
+
+Each documentation page is a `.mdx` file with YAML frontmatter:
+
+```markdown
+---
+title: Page Title
+description: A short description for search and SEO
+---
+
+# Page Title
+
+Your content here.
+```
+
+### Frontmatter fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `title` | Yes | Page title (used in sidebar, search, and browser tab) |
+| `description` | No | Short description for search results and meta tags |
+
+## Page ordering with meta.json
+
+Each directory under `docs/` needs a `meta.json` file that defines the page order and section title:
+
+```json
+{
+  "title": "Getting Started",
+  "pages": ["installation", "quick-start"]
+}
+```
+
+- `title` — The section label shown in the sidebar
+- `pages` — An ordered array of page slugs (filenames without `.mdx`) or subdirectory names
+
+### Example structure
+
+```
+content/v1/docs/
+├── meta.json                    # Root ordering
+├── index.mdx                    # /docs
+├── getting-started/
+│   ├── meta.json                # Section ordering
+│   └── installation.mdx         # /docs/getting-started/installation
+├── configuration/
+│   ├── meta.json
+│   ├── site-yaml.mdx            # /docs/configuration/site-yaml
+│   └── landing-page.mdx
+└── guides/
+    ├── meta.json
+    └── writing-docs.mdx
+```
+
+The root `meta.json` lists top-level pages and sections:
+
+```json
+{
+  "title": "Documentation",
+  "pages": ["index", "getting-started", "configuration", "guides"]
+}
+```
+
+## Markdown features
+
+All standard Markdown syntax is supported, plus GitHub Flavored Markdown extensions.
+
+### Headings
+
+```markdown
+# Heading 1
+## Heading 2
+### Heading 3
+```
+
+Headings automatically get anchor links and appear in the table of contents (controlled by `toc.minHeading` and `toc.maxHeading` in `site.yaml`).
+
+### Code blocks
+
+Fenced code blocks are syntax-highlighted with Shiki. Specify the language after the opening backticks:
+
+````markdown
+```javascript
+function hello() {
+  console.log("Hello, world!");
+}
+```
+````
+
+Supported languages include `javascript`, `typescript`, `python`, `bash`, `yaml`, `json`, `html`, `css`, and [many more](https://shiki.matsu.io/languages).
+
+### Tables
+
+```markdown
+| Column 1 | Column 2 |
+|----------|----------|
+| Cell 1   | Cell 2   |
+```
+
+### Lists
+
+```markdown
+- Unordered item
+- Another item
+  - Nested item
+
+1. Ordered item
+2. Another item
+```
+
+### Links and images
+
+```markdown
+[Link text](https://example.com)
+![Alt text](/path/to/image.png)
+```
+
+### Bold, italic, and code
+
+```markdown
+**Bold text**
+*Italic text*
+`inline code`
+```
+
+## Adding a new page
+
+1. Create a new `.mdx` file in the appropriate directory
+2. Add frontmatter with `title` and `description`
+3. Write your content
+4. Add the page slug to the parent directory's `meta.json`
+5. Rebuild content: `bun run build:content`
+
+The dev server automatically picks up new pages when running `bun run dev`.

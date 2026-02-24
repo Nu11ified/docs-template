@@ -1,23 +1,54 @@
 ---
-title: Welcome
-description: Getting started with the docs template
+title: Introduction
+description: null docs — a fast, configurable documentation template built with Bun, ElysiaJS, and MDX.
 ---
 
-# Welcome to the Docs
+# Introduction
 
-This is a sample documentation site built with Bun + ElysiaJS + React.
+**null docs** is a documentation template that gets out of your way. Write your docs in Markdown or MDX, configure everything from a single YAML file, and deploy anywhere that runs Bun.
 
-## Quick Start
+## Why null docs?
 
-Install dependencies and start the dev server:
+- **Fast** — Bun runtime + ElysiaJS means sub-millisecond response times. Pages are server-rendered with zero client-side JavaScript by default.
+- **Simple** — One `site.yaml` file controls your site name, theme, colors, fonts, navigation, and landing page layout.
+- **MDX support** — Write standard Markdown with optional React components. Syntax highlighting is handled server-side with Shiki.
+- **Built-in search** — FlexSearch indexes all your pages at build time. No external services required.
+- **Type-safe** — All configuration is validated with Zod schemas. Errors are caught before they reach production.
+
+## Quick start
 
 ```bash
+git clone https://github.com/Nu11ified/docs-template my-docs
+cd my-docs
 bun install
 bun run dev
 ```
 
-## Features
+Your docs site is running at `http://localhost:3000`.
 
-- **Fast** — Built on Bun for maximum performance
-- **Customizable** — Configure everything via YAML
-- **Full-text Search** — Server-side search across all docs
+## Project structure
+
+```
+my-docs/
+├── content/
+│   └── v1/
+│       └── docs/
+│           ├── meta.json          # Page ordering
+│           ├── index.mdx          # Docs homepage
+│           └── getting-started/
+│               ├── meta.json
+│               └── installation.mdx
+├── site.yaml                      # Site configuration
+├── src/
+│   ├── server/                    # ElysiaJS server + routes
+│   ├── shared/                    # React components (SSR)
+│   ├── client/                    # Client-side islands
+│   └── styles/                    # Tailwind CSS
+└── public/                        # Static assets
+```
+
+## Next steps
+
+- [Installation](/docs/getting-started/installation) — Set up your project
+- [Site configuration](/docs/configuration/site-yaml) — Customize your site with `site.yaml`
+- [Writing docs](/docs/guides/writing-docs) — Learn the Markdown and MDX syntax
