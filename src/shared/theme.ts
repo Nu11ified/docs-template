@@ -45,13 +45,3 @@ export function generateThemeCSS(theme: Theme): string {
 
   return css;
 }
-
-// ---------------------------------------------------------------------------
-// Quick smoke test — run with: bun src/shared/theme.ts
-// ---------------------------------------------------------------------------
-
-if (import.meta.main) {
-  const { loadConfig } = await import("../server/config");
-  const config = loadConfig();
-  console.log(generateThemeCSS(config.theme));
-}

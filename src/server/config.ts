@@ -18,10 +18,3 @@ export function loadConfig(configPath = "site.yaml"): FullConfig {
 export function clearConfigCache() {
   cachedConfig = null;
 }
-
-// Quick smoke test when run directly: bun src/server/config.ts
-if (import.meta.main) {
-  const config = loadConfig();
-  console.log("Config loaded successfully:");
-  console.log(JSON.stringify(config, null, 2));
-}

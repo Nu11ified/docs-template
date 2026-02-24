@@ -86,28 +86,3 @@ export async function getPages(version: string): Promise<ManifestEntry[]> {
   const m = await loadManifest();
   return m[version] || [];
 }
-
-// ---------------------------------------------------------------------------
-// Self-test when run directly
-// ---------------------------------------------------------------------------
-
-if (import.meta.main) {
-  console.log("Content Loader -- Self-test\n");
-
-  const pages = await getPages("v1");
-  console.log("Pages for v1:", JSON.stringify(pages, null, 2));
-
-  const page = await getPage("v1", ["index"]);
-  console.log(
-    "\nLoaded index page:",
-    page ? `OK -- title: "${page.data.frontmatter.title}"` : "FAILED"
-  );
-
-  const installPage = await getPage("v1", ["getting-started", "installation"]);
-  console.log(
-    "Loaded installation page:",
-    installPage
-      ? `OK -- title: "${installPage.data.frontmatter.title}"`
-      : "FAILED"
-  );
-}
