@@ -1,0 +1,88 @@
+# Site metadata
+site:
+  name: "My Project"
+  tagline: "Build faster with less"
+  logo: "/logo.svg"
+  favicon: "/favicon.ico"
+  url: "https://docs.myproject.com"
+  repo: "https://github.com/org/repo"
+
+# Theming — values become CSS custom properties
+theme:
+  colors:
+    primary: "#6366f1"
+    secondary: "#ec4899"
+    background: "#ffffff"
+    surface: "#f8fafc"
+    text: "#0f172a"
+    dark:
+      background: "#0f172a"
+      surface: "#1e293b"
+      text: "#f8fafc"
+  fonts:
+    heading: "Inter"
+    body: "Inter"
+    code: "JetBrains Mono"
+  radius: "md" # none | sm | md | lg | full
+
+# Landing page — ordered section array
+landing:
+  sections:
+    - type: hero
+      title: "Ship docs that developers love"
+      subtitle: "Lightweight, fast, customizable documentation powered by Bun + ElysiaJS."
+      primaryCTA:
+        label: "Get Started"
+        href: "/docs"
+      secondaryCTA:
+        label: "GitHub"
+        href: "https://github.com/org/repo"
+      image: "/hero-screenshot.png"
+    - type: features
+      title: "Why choose this?"
+      columns: 3
+      items:
+        - icon: "zap"
+          title: "Lightning Fast"
+          description: "Built on Bun + ElysiaJS for maximum speed"
+        - icon: "palette"
+          title: "Customizable"
+          description: "Theme everything via a single YAML file"
+        - icon: "search"
+          title: "Full-text Search"
+          description: "Server-side search across all docs"
+    - type: cta
+      title: "Ready to get started?"
+      description: "Set up your docs site in under 5 minutes."
+      button:
+        label: "Read the Docs"
+        href: "/docs"
+    - type: testimonials
+      items:
+        - quote: "Best docs template I've used."
+          author: "Jane Doe"
+          role: "Staff Engineer"
+
+# Docs configuration
+docs:
+  defaultVersion: "v1"
+  versions:
+    - label: "v1"
+      path: "v1"
+  search:
+    enabled: true
+    placeholder: "Search docs..."
+  sidebar:
+    collapsible: true
+  toc:
+    minHeading: 2
+    maxHeading: 3
+
+# Top navigation
+nav:
+  links:
+    - label: "Docs"
+      href: "/docs"
+    - label: "GitHub"
+      href: "https://github.com/org/repo"
+      external: true
