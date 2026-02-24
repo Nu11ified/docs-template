@@ -5,13 +5,13 @@ import type { ComponentType } from "react";
 // Island hydration registry
 // ---------------------------------------------------------------------------
 
-const registry: Record<string, ComponentType<any>> = {};
+const registry: Record<string, ComponentType<Record<string, unknown>>> = {};
 
 /**
  * Register a component so it can be hydrated on the client when an element
  * with a matching `data-island` attribute is found in the DOM.
  */
-export function registerIsland(name: string, component: ComponentType<any>) {
+export function registerIsland(name: string, component: ComponentType<Record<string, unknown>>) {
   registry[name] = component;
 }
 

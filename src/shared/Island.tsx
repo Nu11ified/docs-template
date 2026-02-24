@@ -6,7 +6,7 @@ import type { ComponentType } from "react";
 
 interface IslandProps {
   name: string;
-  component: ComponentType<any>;
+  component: ComponentType<Record<string, unknown>>;
   props: Record<string, unknown>;
 }
 

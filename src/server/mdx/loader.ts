@@ -11,14 +11,19 @@
  */
 
 import { run } from "@mdx-js/mdx";
+import type { ComponentType } from "react";
 import * as runtime from "react/jsx-runtime";
 
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
+/** The React component returned by MDX compilation. */
+export type MDXComponent = ComponentType<Record<string, unknown>>;
+
+/** Metadata extracted from an MDX page during compilation. */
 export type PageData = {
-  frontmatter: Record<string, any>;
+  frontmatter: Record<string, unknown>;
   headings: Array<{ id: string; text: string; level: number }>;
   plainText?: string;
 };
@@ -36,7 +41,7 @@ export type Manifest = Record<string, ManifestEntry[]>;
 // ---------------------------------------------------------------------------
 
 let manifest: Manifest | null = null;
-const pageCache = new Map<string, { Component: any; data: PageData }>();
+const pageCache = new Map<string, { Component: MDXComponent; data: PageData }>();
 
 // ---------------------------------------------------------------------------
 // Public API
@@ -54,7 +59,7 @@ export async function loadManifest(): Promise<Manifest> {
 export async function getPage(
   version: string,
   slugParts: string[]
-): Promise<{ Component: any; data: PageData } | null> {
+): Promise<{ Component: MDXComponent; data: PageData } | null> {
   const slug = slugParts.join("/") || "index";
   const cacheKey = `${version}/${slug}`;
 
@@ -70,7 +75,7 @@ export async function getPage(
     ]);
 
     const mod = await run(code, {
-      ...(runtime as any),
+      ...(runtime as unknown as Parameters<typeof run>[1]),
       baseUrl: import.meta.url,
     });
     const result = { Component: mod.default, data };

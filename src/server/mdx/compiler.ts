@@ -152,7 +152,7 @@ async function compileAll() {
     // 2. Compile MDX
     let compiledCode: string;
     try {
-      const rehypePlugins: any[] = [rehypeSlug, rehypeAutolinkHeadings];
+      const rehypePlugins: import("unified").PluggableList = [rehypeSlug, rehypeAutolinkHeadings];
 
       // Try with shiki first; fall back without it if it fails
       if (!shikiPluginFailed) {
