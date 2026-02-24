@@ -1,13 +1,13 @@
-# docs-template
+# null docs
 
 A lightweight, fast documentation site template built on **Bun + ElysiaJS + React**.
 
-YAML-configurable landing page, full-featured docs with MDX, server-side search, versioning, and dark mode — all in a single, minimal stack.
+YAML-configurable landing page, full-featured docs with MDX, server-side search, and dark mode — all in a single, minimal stack.
 
 ## Quick Start
 
 ```bash
-bunx degit org/docs-template my-docs
+git clone https://github.com/Nu11ified/docs-template my-docs
 cd my-docs
 bun install
 bun run build
@@ -22,13 +22,13 @@ Edit `site.yaml` to configure everything:
 
 - **Site metadata** — name, tagline, logo, favicon, URLs
 - **Theme** — colors (primary, secondary, background, surface, text), fonts, border radius, dark mode
-- **Landing page** — ordered sections (hero, features, CTA, testimonials) with full content control
+- **Landing page** — ordered sections (hero, features, FAQ, CTA) with full content control
 - **Docs** — default version, version list, search settings, sidebar/TOC behavior
 - **Navigation** — top nav links with external link support
 
 ## Adding Documentation
 
-Drop MDX files into `content/{version}/docs/`:
+Drop MDX files into `content/v1/docs/`:
 
 ```
 content/
@@ -39,9 +39,6 @@ content/
       getting-started/
         meta.json
         installation.mdx
-  v2/
-    docs/
-      ...
 ```
 
 Each `meta.json` defines page order:
@@ -90,7 +87,7 @@ src/
     layouts/        # Page layouts (Landing, Docs)
     landing/        # Landing page section components
     components/     # Shared UI (Nav)
-content/            # MDX documentation files (versioned)
+content/            # MDX documentation files
 public/             # Static assets
 site.yaml           # Site configuration
 ```

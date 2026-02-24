@@ -7,7 +7,7 @@ import { z } from "zod";
 export const SiteConfigSchema = z.object({
   name: z.string(),
   tagline: z.string(),
-  logo: z.string(),
+  logo: z.string().optional(),
   favicon: z.string(),
   url: z.string().url(),
   repo: z.string().url(),

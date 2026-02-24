@@ -2,7 +2,6 @@
 site:
   name: "null docs"
   tagline: "Beautiful documentation, instantly."
-  logo: "/logo.svg"
   favicon: "/favicon.ico"
   url: "https://docs.myproject.com"
   repo: "https://github.com/Nu11ified/docs-template"
