@@ -1,6 +1,7 @@
 providers = []
 
 [phases.setup]
+nixpkgsArchive = "4533d9293756b63904b7238acb84ac8fe4c8c2c4"
 nixPkgs = ["bun"]
 
 [phases.install]
