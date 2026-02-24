@@ -7,7 +7,7 @@
     "start": "NODE_ENV=production bun src/server/index.ts",
     "build:content": "bun src/server/mdx/compiler.ts",
     "build:client": "bun build src/client/entry.tsx --outdir public/assets --target browser --minify --splitting",
-    "build:css": "bunx @tailwindcss/cli -i src/styles/globals.css -o public/assets/styles.css --minify",
+    "build:css": "tailwindcss -i src/styles/globals.css -o public/assets/styles.css --minify",
     "build": "bun run build:content && bun run build:client && bun run build:css"
   },
   "dependencies": {
