@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: var(--site-primary);
+  --color-secondary: var(--site-secondary);
+  --color-surface: var(--site-surface);
+  --font-heading: var(--site-font-heading);
+  --font-body: var(--site-font-body);
+  --font-code: var(--site-font-code);
+  --radius-site: var(--site-radius);
+}
