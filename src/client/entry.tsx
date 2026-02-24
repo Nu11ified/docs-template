@@ -3,6 +3,7 @@ import { Search } from "./components/Search";
 import { Sidebar } from "./components/Sidebar";
 import { TOC } from "./components/TOC";
 import { ThemeToggle } from "./components/ThemeToggle";
+import { initCodeBlocks } from "./components/CodeBlock";
 
 registerIsland("Search", Search);
 registerIsland("Sidebar", Sidebar);
@@ -10,3 +11,4 @@ registerIsland("TOC", TOC);
 registerIsland("ThemeToggle", ThemeToggle);
 
 hydrateIslands();
+initCodeBlocks();
