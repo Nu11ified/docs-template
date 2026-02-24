@@ -1,6 +1,7 @@
 import type { FullConfig } from "../types";
 import { Island } from "../Island";
 import { ThemeToggle } from "../../client/components/ThemeToggle";
+import { VersionPicker } from "../../client/components/VersionPicker";
 
 interface NavProps {
   config: FullConfig;
@@ -24,10 +25,15 @@ export function Nav({ config, showVersionPicker, currentVersion }: NavProps) {
             {config.site.name}
           </a>
 
-          {showVersionPicker && currentVersion && (
-            <span className="hidden sm:inline-flex items-center rounded-md bg-[var(--site-primary)]/10 px-2 py-0.5 text-xs font-medium text-[var(--site-primary)]">
-              {currentVersion}
-            </span>
+          {showVersionPicker && (
+            <Island
+              name="VersionPicker"
+              component={VersionPicker}
+              props={{
+                versions: config.docs.versions,
+                currentVersion: currentVersion || config.docs.defaultVersion,
+              }}
+            />
           )}
         </div>
 

@@ -65,9 +65,11 @@ landing:
 
 # Docs configuration
 docs:
-  defaultVersion: "v1"
+  defaultVersion: "v2"
   versions:
-    - label: "v1"
+    - label: "v2"
+      path: "v2"
+    - label: "v1 (Legacy)"
       path: "v1"
   search:
     enabled: true
