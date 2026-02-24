@@ -4,4 +4,6 @@ dist/
 public/assets/*.js
 public/assets/*.css
 *.log
+*.png
+.nixpacks/
 style-guide.md
