@@ -1,0 +1,40 @@
+---
+title: "Why We Chose Bun"
+description: "A look at why Bun is the perfect runtime for our documentation platform — and what it means for performance."
+date: 2026-02-20
+author: team
+coverImage: https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80
+tags: [engineering, architecture]
+draft: false
+---
+
+## The runtime decision
+
+When we set out to build this documentation platform, we had a key decision: which JavaScript runtime should power it?
+
+### Why not Node.js?
+
+Node.js is battle-tested and has a massive ecosystem. But we wanted something faster out of the box — especially for server-side rendering React components.
+
+### Enter Bun
+
+Bun gave us everything we needed:
+
+- **Fast startup** — The server starts in milliseconds, not seconds.
+- **Built-in bundler** — No need for webpack, esbuild, or vite as separate tools.
+- **TypeScript native** — No transpilation step required.
+- **npm compatible** — All our favorite packages just work.
+
+### The results
+
+Our documentation pages render in under 5ms server-side. The entire build (MDX compilation + client bundle + CSS) completes in seconds.
+
+```typescript
+// This is all it takes to start the server
+const app = new Elysia()
+  .use(staticPlugin())
+  .use(docsRoutes)
+  .listen(3000);
+```
+
+Bun was the right call. If you're building a content-heavy site with SSR, give it a try.
