@@ -41,6 +41,18 @@ type ManifestEntry = {
 
 type Manifest = Record<string, ManifestEntry[]>;
 
+type BlogManifestEntry = {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+  author: string;
+  coverImage?: string;
+  tags: string[];
+  featured: boolean;
+  draft: boolean;
+};
+
 type SearchEntry = {
   slug: string;
   title: string;
@@ -63,6 +75,15 @@ function parseFilePath(filePath: string): { version: string; slug: string[] } {
   // Skip the "docs" segment (parts[1]) -- the rest is the slug
   const slug = parts.slice(2);
   return { version, slug };
+}
+
+/** Parse a blog file path like `content/blog/hello-world.mdx`
+ *  into { slug: "hello-world" }. */
+function parseBlogFilePath(filePath: string): { slug: string } {
+  const rel = relative("content", filePath).split(sep).join("/");
+  // rel looks like "blog/hello-world.mdx"
+  const slug = rel.replace(/^blog\//, "").replace(/\.mdx$/, "");
+  return { slug };
 }
 
 /** Extract h2 and h3 headings from raw markdown content. */
@@ -129,11 +150,10 @@ async function compileAll() {
   }
 
   if (files.length === 0) {
-    console.log("No MDX files found. Nothing to compile.");
-    return;
+    console.log("No docs MDX files found. Skipping docs compilation.");
+  } else {
+    console.log(`Found ${files.length} docs MDX file(s).\n`);
   }
-
-  console.log(`Found ${files.length} MDX file(s).\n`);
 
   const manifest: Manifest = {};
   const searchData: Record<string, SearchEntry[]> = {};
@@ -224,6 +244,85 @@ async function compileAll() {
     });
   }
 
+  // -------------------------------------------------------------------
+  // Blog compilation
+  // -------------------------------------------------------------------
+
+  const blogGlob = new Glob("content/blog/**/*.mdx");
+  const blogFiles: string[] = [];
+  for await (const file of blogGlob.scan({ cwd: ".", absolute: false })) {
+    blogFiles.push(file);
+  }
+
+  const blogManifest: BlogManifestEntry[] = [];
+
+  if (blogFiles.length > 0) {
+    console.log(`\nFound ${blogFiles.length} blog post(s).\n`);
+
+    for (const filePath of blogFiles) {
+      const { slug } = parseBlogFilePath(filePath);
+      console.log(`Compiling blog: ${filePath} -> blog/${slug}`);
+
+      const raw = await Bun.file(filePath).text();
+      const { data: frontmatter, content } = matter(raw);
+
+      let compiledCode: string;
+      try {
+        const rehypePlugins: import("unified").PluggableList = [rehypeSlug, rehypeAutolinkHeadings];
+        if (!shikiPluginFailed) {
+          rehypePlugins.push([rehypeShiki, { theme: "github-dark" }]);
+        }
+        const compiled = await compile(content, {
+          outputFormat: "function-body",
+          remarkPlugins: [remarkGfm],
+          rehypePlugins,
+        });
+        compiledCode = String(compiled);
+      } catch (err) {
+        if (!shikiPluginFailed) {
+          console.warn(`  Warning: Shiki plugin failed for blog post, retrying without...`);
+          shikiPluginFailed = true;
+          const compiled = await compile(content, {
+            outputFormat: "function-body",
+            remarkPlugins: [remarkGfm],
+            rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
+          });
+          compiledCode = String(compiled);
+        } else {
+          throw err;
+        }
+      }
+
+      const headings = extractHeadings(content);
+      const plainText = stripMarkdown(content);
+
+      const jsOutPath = join(".cache", "content", "blog", `${slug}.js`);
+      const jsonOutPath = join(".cache", "content", "blog", `${slug}.json`);
+      await mkdir(dirname(jsOutPath), { recursive: true });
+
+      await Bun.write(jsOutPath, compiledCode);
+      await Bun.write(
+        jsonOutPath,
+        JSON.stringify({ frontmatter, headings, plainText }, null, 2)
+      );
+
+      console.log(`  -> ${jsOutPath}`);
+      console.log(`  -> ${jsonOutPath}`);
+
+      blogManifest.push({
+        slug,
+        title: (frontmatter.title as string) || slug,
+        description: (frontmatter.description as string) || "",
+        date: (frontmatter.date as string) || new Date().toISOString(),
+        author: (frontmatter.author as string) || "team",
+        coverImage: (frontmatter.coverImage as string) || undefined,
+        tags: (frontmatter.tags as string[]) || [],
+        featured: (frontmatter.featured as boolean) || false,
+        draft: (frontmatter.draft as boolean) || false,
+      });
+    }
+  }
+
   // Write manifest
   const manifestPath = join(".cache", "manifest.json");
   await mkdir(dirname(manifestPath), { recursive: true });
@@ -237,6 +336,15 @@ async function compileAll() {
     const searchPath = join(searchDir, `${version}.json`);
     await Bun.write(searchPath, JSON.stringify(entries, null, 2));
     console.log(`Search index -> ${searchPath}`);
+  }
+
+  // Write blog manifest
+  if (blogManifest.length > 0) {
+    const blogManifestPath = join(".cache", "blog-manifest.json");
+    // Sort by date descending
+    blogManifest.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    await Bun.write(blogManifestPath, JSON.stringify(blogManifest, null, 2));
+    console.log(`Blog manifest -> ${blogManifestPath}`);
   }
 
   console.log("\nDone! All content compiled successfully.");
@@ -253,4 +361,4 @@ if (import.meta.main) {
   });
 }
 
-export { compileAll, parseFilePath, extractHeadings, stripMarkdown };
+export { compileAll, parseFilePath, parseBlogFilePath, extractHeadings, stripMarkdown };
