@@ -92,11 +92,24 @@ docs:
     minHeading: 2
     maxHeading: 3
 
+# Blog configuration
+blog:
+  enabled: true
+  title: "Blog"
+  description: "Latest updates, tutorials, and announcements"
+  postsPerPage: 12
+  authors:
+    team:
+      name: "The Team"
+      bio: "Building great developer tools."
+
 # Top navigation
 nav:
   links:
     - label: "Docs"
       href: "/docs"
+    - label: "Blog"
+      href: "/blog"
     - label: "GitHub"
       href: "https://github.com/Nu11ified/docs-template"
       external: true
