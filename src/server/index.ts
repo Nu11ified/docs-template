@@ -4,6 +4,7 @@ import { loadConfig, clearConfigCache } from "./config";
 import { landingRoutes } from "./routes/landing";
 import { docsRoutes } from "./routes/docs";
 import { apiRoutes } from "./routes/api";
+import { blogRoutes } from "./routes/blog";
 
 const config = loadConfig();
 
@@ -21,6 +22,7 @@ app
   .use(staticPlugin({ prefix: "/blog/images", assets: "content/blog/images", noCache: Bun.env.NODE_ENV !== "production" }))
   .use(landingRoutes)
   .use(docsRoutes)
+  .use(blogRoutes)
   .use(apiRoutes)
   .listen(Number(Bun.env.PORT) || 3000);
 
