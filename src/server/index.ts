@@ -18,6 +18,7 @@ if (Bun.env.NODE_ENV !== "production") {
 
 app
   .use(staticPlugin({ prefix: "/static", assets: "public", noCache: Bun.env.NODE_ENV !== "production" }))
+  .use(staticPlugin({ prefix: "/blog/images", assets: "content/blog/images", noCache: Bun.env.NODE_ENV !== "production" }))
   .use(landingRoutes)
   .use(docsRoutes)
   .use(apiRoutes)
