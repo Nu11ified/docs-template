@@ -215,6 +215,50 @@ export const NavSchema = z.object({
 export type Nav = z.infer<typeof NavSchema>;
 
 // ---------------------------------------------------------------------------
+// Blog configuration
+// ---------------------------------------------------------------------------
+
+export const BlogAuthorLinksSchema = z.object({
+  twitter: z.string().url().optional(),
+  github: z.string().url().optional(),
+  website: z.string().url().optional(),
+});
+
+export type BlogAuthorLinks = z.infer<typeof BlogAuthorLinksSchema>;
+
+export const BlogAuthorSchema = z.object({
+  name: z.string(),
+  avatar: z.string().optional(),
+  bio: z.string().optional(),
+  links: BlogAuthorLinksSchema.optional(),
+});
+
+export type BlogAuthor = z.infer<typeof BlogAuthorSchema>;
+
+export const BlogConfigSchema = z.object({
+  enabled: z.boolean().default(true),
+  title: z.string().default("Blog"),
+  description: z.string().optional(),
+  postsPerPage: z.number().int().min(1).default(12),
+  authors: z.record(z.string(), BlogAuthorSchema).default({}),
+});
+
+export type BlogConfig = z.infer<typeof BlogConfigSchema>;
+
+export const BlogFrontmatterSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  date: z.coerce.date(),
+  author: z.string(),
+  coverImage: z.string().optional(),
+  tags: z.array(z.string()).default([]),
+  featured: z.boolean().default(false),
+  draft: z.boolean().default(false),
+});
+
+export type BlogFrontmatter = z.infer<typeof BlogFrontmatterSchema>;
+
+// ---------------------------------------------------------------------------
 // Full configuration
 // ---------------------------------------------------------------------------
 
@@ -223,6 +267,7 @@ export const FullConfigSchema = z.object({
   theme: ThemeSchema,
   landing: LandingSchema,
   docs: DocsConfigSchema,
+  blog: BlogConfigSchema.optional(),
   nav: NavSchema,
 });
 
